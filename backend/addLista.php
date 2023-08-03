@@ -1,12 +1,25 @@
 <?php
-    header('Access-Control-Allow-Origin: *'); // Permisão Url
-    header('Access-Control-Allow-Methods: *'); // Permisão metodo
-    header('Access-Control-Allow-Headers: Content-Type');
-    header('Content-Type: application/json');
+	// @47
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $newItem = json_decode(file_get_contents('php://input'), true); // Recebe os dados
+	$servername = "localhost";
+	$username = "**************";
+	$password = "**************";
+	$dbname = "id21101072_listaprodutos";
 
-        echo json_encode($newItem); // Responde com o novo item em formato JSON.
-    }
+	// Create connection
+	$conn = new mysqli($servername, $username, $password, $dbname);
+	// Check connection
+	if ($conn->connect_error) {
+		die("Falha na conexão: " . $conn->connect_error);
+	}
+
+	$sql = "INSERT INTO lista_produtos (produto) VALUES ('" . $_POST['produto'] . "');";
+
+	if (mysqli_query($conn, $sql)) {
+		$referer = $_SERVER['HTTP_REFERER'];
+        header("Location: $referer");
+	} else {
+		echo 'Error: insira os dados novamente';
+	}
+	$conn->close();
 ?>
